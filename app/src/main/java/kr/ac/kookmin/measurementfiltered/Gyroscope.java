@@ -1,6 +1,7 @@
 package kr.ac.kookmin.measurementfiltered;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -19,8 +20,8 @@ public class Gyroscope implements SensorEventListener {
 
     public MyLog log;
 
-    Gyroscope() {
-        log = new MyLog(this.setFilename());
+    Gyroscope(Context applicationContext) {
+        log = new MyLog(setFilename(), applicationContext);
     }
 
     @Override

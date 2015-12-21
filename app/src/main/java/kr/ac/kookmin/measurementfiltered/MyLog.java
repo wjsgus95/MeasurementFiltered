@@ -1,6 +1,7 @@
 package kr.ac.kookmin.measurementfiltered;
 
 
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,10 +33,14 @@ public class MyLog {
     File rawFile, lowpassFile, avgFile, mvavgFile;
     FileOutputStream rawOut, lowpassOut, avgOut, mvavgOut;
 
-    MyLog(String filename) {
+    Context context;
+
+    MyLog(String filename, Context applicationContext) {
         filter = new Filter();
         this.filename = filename;
         values = new float[3];
+
+        context = applicationContext;
     }
 
     public void start() {
@@ -66,12 +71,9 @@ public class MyLog {
         // String 'filename' format : [SensorTypeSymbol]yymmdd-hour:minute
         // Example : G151219-14:27
         try {
-            rawFile = new File(Environment.getExternalStorageDirectory().getPath() + "/SensorData/" + filename, filename + "raw.csv");
+            rawFile = new File(context.getExternalFilesDir(null), filename + "raw.csv");
 
             rawOut = new FileOutputStream(rawFile, true);
-
-            rawOut.write("Test".getBytes());
-            rawOut.close();
         }
         catch (Exception e) {
         }
@@ -80,7 +82,7 @@ public class MyLog {
     private void createFileLowpass() {
 
         try {
-            lowpassFile = new File(Environment.getExternalStorageDirectory().getPath() + "/SensorData/" + filename, filename + "lowpass.csv");
+            lowpassFile = new File(context.getExternalFilesDir(null), filename + "lowpass.csv");
 
             lowpassOut = new FileOutputStream(lowpassFile, true);
         }
@@ -91,7 +93,7 @@ public class MyLog {
     private void createFileAvg() {
 
         try {
-            avgFile = new File(Environment.getExternalStorageDirectory().getPath() + "/SensorData/" + filename, filename + "avg.csv");
+            avgFile = new File(context.getExternalFilesDir(null), filename + "avg.csv");
 
             avgOut = new FileOutputStream(avgFile, true);
         }
@@ -102,7 +104,7 @@ public class MyLog {
     private void createFileMvavg() {
 
         try {
-            mvavgFile = new File(Environment.getExternalStorageDirectory().getPath() + "/SensorData/" + filename, filename + "mvavg.csv");
+            mvavgFile = new File(context.getExternalFilesDir(null), filename + "mvavg.csv");
 
             mvavgOut = new FileOutputStream(mvavgFile, true);
         }
@@ -118,7 +120,6 @@ public class MyLog {
         currentTime = SystemClock.uptimeMillis() - startTime;
         sensorValue = currentTime + "," + values[0] + "," + values[1] + "," + values[2] + "\n";
         rawOut.write(sensorValue.getBytes());
-        rawOut.close();
     }
 
     public void lowpass(SensorEvent event) throws IOException {
@@ -128,7 +129,6 @@ public class MyLog {
         currentTime = SystemClock.uptimeMillis() - startTime;
         sensorValue = currentTime + "," + values[0] + "," + values[1] + "," + values[2] + "\n";
         lowpassOut.write(sensorValue.getBytes());
-        lowpassOut.close();
     }
 
     public void avg(SensorEvent event) throws IOException {
@@ -138,7 +138,6 @@ public class MyLog {
         currentTime = SystemClock.uptimeMillis() - startTime;
         sensorValue = currentTime + "," + values[0] + "," + values[1] + "," + values[2] + "\n";
         avgOut.write(sensorValue.getBytes());
-        avgOut.close();
     }
 
     public void mvavg(SensorEvent event) throws IOException {
@@ -148,7 +147,6 @@ public class MyLog {
         currentTime = SystemClock.uptimeMillis() - startTime;
         sensorValue = currentTime + "," + values[0] + "," + values[1] + "," + values[2] + "\n";
         mvavgOut.write(sensorValue.getBytes());
-        mvavgOut.close();
     }
 }
 

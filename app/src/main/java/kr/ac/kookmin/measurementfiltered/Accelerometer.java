@@ -1,5 +1,6 @@
 package kr.ac.kookmin.measurementfiltered;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -19,30 +20,31 @@ public class Accelerometer implements SensorEventListener {
 
     public MyLog log;
 
-    Accelerometer() {
-        log = new MyLog(setFilename());
+    Accelerometer(Context applicationContext) {
+        log = new MyLog(setFilename(), applicationContext);
     }
 
     @Override
         public void onSensorChanged(SensorEvent event) {
         try {
             log.raw(event);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            Log.e(MainActivity.TAG, "Raw Log Fail");
             e.printStackTrace();
         }
         try {
             log.lowpass(event);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             log.avg(event);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             log.mvavg(event);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

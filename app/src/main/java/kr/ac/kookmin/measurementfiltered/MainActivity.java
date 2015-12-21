@@ -5,9 +5,15 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = "MyActivity";
+
     SensorManager sensorManager;
+
+    File file;
 
     Sensor accelerometerSensor;
     Sensor gyroscopeSensor;
@@ -30,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
         gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
         magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-        accelerometer = new Accelerometer();
-        gyroscope = new Gyroscope();
-        magnetometer = new Magnetometer();
+        accelerometer = new Accelerometer(getApplicationContext());
+        gyroscope = new Gyroscope(getApplicationContext());
+        magnetometer = new Magnetometer(getApplicationContext());
 
         sensorsOn();
     }
@@ -43,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
         gyroscope.log.start();
         magnetometer.log.start();
 
-        //sensorManager.registerListener(accelerometer, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
-        //sensorManager.registerListener(gyroscope, gyroscopeSensor, SensorManager.SENSOR_DELAY_FASTEST);
-        //sensorManager.registerListener(magnetometer, magnetometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(accelerometer, accelerometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(gyroscope, gyroscopeSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(magnetometer, magnetometerSensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     public void sensorsOff() {
